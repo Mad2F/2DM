@@ -13,7 +13,15 @@ public:
 
 class Circle : public Shape {
 	public:
+		//constructors
+		Circle();
+		Circle(int);
+		Circle(Point, int);
+		
+	protected:
 		int m_radius;
 		Point m_center;
+
+
 };
 #endif

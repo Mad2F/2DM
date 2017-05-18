@@ -5,7 +5,10 @@ class Point {
 public:
 	int X;
 	int Y;
-	Point() {}
+
+	//Constructors
+	Point();
+	Point(int , int);
 	~Point() {}
 
 };
