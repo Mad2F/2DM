@@ -10,7 +10,7 @@ Circle::Circle(Point C, int R) : m_center(C), m_radius(R) {}
 
 int Circle::distance(Circle* pCircle)
 {
-	return m_center.distance(&pCircle->getCenter()) - m_radius;
+	return m_center.distance(&pCircle->getCenter()) - m_radius - pCircle->getRadius();
 }
 
 
