@@ -16,8 +16,9 @@ public:
 	virtual void display() {};
 	//returns true if the shape collides with another given shape
 	//TODO
-	virtual bool collideWith(Shape *) { return false; };
-
+	virtual int distance(Shape *)		{ return -1; };
+	virtual bool collideWith(Shape *)	{ return false; };
+	virtual bool touch(Shape *)			{ return false; };
 };
 
 class Circle : public Shape {
@@ -26,7 +27,14 @@ public:
 	Circle();
 	Circle(int);
 	Circle(Point, int);
-		
+
+	Point getCenter() { return m_center };
+
+	int distance(Circle*);
+
+	bool collideWith(Circle*);
+	bool touch(Circle*);
+
 protected:
 	int m_radius;
 	Point m_center;

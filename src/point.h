@@ -1,6 +1,8 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include <cmath>
+
 class Point {
 public:
 	int X;
@@ -10,6 +12,8 @@ public:
 	Point();
 	Point(int , int);
 	~Point() {}
+
+	int distance(Point*);
 
 };
 
