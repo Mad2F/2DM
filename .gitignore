@@ -1,6 +1,6 @@
 #ignore the content of build path bin
 bin/*
-Win32/*
+Win32/
 
 #needs an empty file to create the folder in the repository
 !bin/.gitkeep
