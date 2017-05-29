@@ -63,7 +63,7 @@ Segment::Segment(Point A, Point B, bool isVector) : m_isVector(isVector)
 	m_Points.push_back(B);
 }
 
-bool Segment::assert()
+bool Segment::own_assert()
 {
 	return m_Points.size() == 2;
 }
@@ -71,7 +71,7 @@ bool Segment::assert()
 int Segment::length()
 {
 	//Will return -1 if the Segment has less than two points...
-	int d = assert() ? m_Points[0].distance(&m_Points[1]) : -1;
+	int d = own_assert() ? m_Points[0].distance(&m_Points[1]) : -1;
 	return d;
 }
 

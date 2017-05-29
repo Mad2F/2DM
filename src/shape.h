@@ -34,7 +34,7 @@ public:
 	virtual void update(Point) {};
 
 	//should we also have some sort of "Assert function on the Shapes to ensure after each run the coherence of our world ?
-	virtual bool assert() { return true;  }
+	virtual bool own_assert() { return true;  }
 
 
 protected:
@@ -85,7 +85,7 @@ public:
 	int length();
 
 	//Assert that the Segment is correctly living (ie has two points)
-	bool assert();
+	bool own_assert();
 	
 	//return true if the point is above the Segment (AB) assuming that the segment is horizontal A left B right
 	bool isAbove(Point* pPoint);

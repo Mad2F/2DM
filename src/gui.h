@@ -2,20 +2,41 @@
 #define GUI_H
 
 #include "button.h"
+#include "shape.h"
 
 class gui {
 public:
+	//Constructor and destructor initializes everything
 	gui();
 	~gui() {};
+	//Resize by recalculating the coefficients
 	void resize();
+	//Get Mouse coordinates
 	sf::Vector2i getMouse();
+	//Check if buttons are activated
 	bool checkButtons(sf::Vector2i);
+	//Block and unblock buttons
 	void playpauseButtons(bool);
+	//Display buttons and text
 	void display();
+	//Control loop
 	void masterLoop();
+	//vector with necessary objects
+	std::vector<Circle> collection;
+	//list with colors to paint objects
+	std::vector<sf::Color> colorcollection;
+	//Size reference of universe
+	int W_world = 1000;
+	int H_world = 1000;
+	//Update position of collection
+	void update();
+	//Add circle
+	void addForm(int x, int y, int r);
 
 private:
+	//Window
 	sf::RenderWindow window;
+	//Size
 	int W = 800;
 	int H = 600;
 	//Create mouse
