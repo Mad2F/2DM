@@ -23,7 +23,7 @@ Circle::Circle(Segment S)
 	Circle(points[0], points[1]);
 }
 
-int Circle::distance(Circle* pCircle)
+float Circle::distance(Circle* pCircle)
 {
 	return m_center.distance(&pCircle->getCenter()) - m_radius - pCircle->getRadius();
 }
@@ -48,44 +48,47 @@ Point Circle::getNormal(Segment* pSeg) {
 	return pSeg->getNormal();
 }
 
-void Circle::update(Point N) {
+void Circle::updateSpeed(Point N) {
 	m_speed = m_speed - N * 2 * (m_speed*N);
 }
 
 
 
 //------------------------------------------------
-//segment Relasted functions
+//segment Related functions
 
-Segment::Segment(Point A, Point B, bool isVector) : m_isVector(isVector)
+Segment::Segment(Point A, Point B)
 {
 	m_Points.push_back(A);
 	m_Points.push_back(B);
 }
 
-bool Segment::assert()
+bool Segment::hasTwoPoints()
 {
 	return m_Points.size() == 2;
 }
 
-int Segment::length()
+double Segment::length()
 {
 	//Will return -1 if the Segment has less than two points...
-	int d = assert() ? m_Points[0].distance(&m_Points[1]) : -1;
+	int d = hasTwoPoints() ? m_Points[0].distance(&m_Points[1]) : -1;
 	return d;
 }
 
-bool Segment::isAbove(Point* pPoint)
+
+
+bool Segment::collideWith(Circle* pCircle)
 {
-//TODO
+	if (pCircle)
+	{
+		Point C = pCircle->getCenter();
+		double R = pCircle->getRadius();
+		return distance(&C) < R;
+	}
 	return false;
 }
 
-bool Segment::isOnSegment(Point* pPoint)
-{
-//TODO
-	return false;
-}
+
 
 Point* Segment::intersectWith(Segment* pSegment)
 {
@@ -96,4 +99,45 @@ Point* Segment::intersectWith(Segment* pSegment)
 Point Segment::getNormal() {
 	Point U(-(m_Points[0].Y - m_Points[1].Y), m_Points[0].X - m_Points[1].X);
 	return U / U.normL2();;
+}
+
+Point Segment::getTangent()
+{
+	Point T = hasTwoPoints() ? m_Points[1] - m_Points[0] : Point() ;
+	return (T == Point() ? Point() : T / T.normL2());
+}
+
+Point Segment::projection(Point* pPoint)
+{
+	//If we want to calculate the projection D of C on AB
+	//We write the following equations :
+	// AB.CD = 0 and D = A + alpha * (B-A)
+	//If alpha is in [0;1] then D is indeed on the segment, else it falls outside on the line.
+	if (length() > 0)
+	{
+		Point T = m_Points[1] - m_Points[0];
+		double L = length()*length();
+		double alpha = (T.X*(pPoint->X - m_Points[0].X) + T.Y*(pPoint->Y - m_Points[0].Y)) / L;
+		if (alpha >= 0 && alpha <= 1)
+			return m_Points[0] + T*alpha;
+	}
+	return DUMMY;
+}
+
+bool Segment::isOnSegment(Point* pPoint)
+{
+	//The point is on the segment if and only if
+	//its projection on the segment is itself
+	return *pPoint == projection(pPoint);
+}
+
+double Segment::distance(Point* pPoint)
+{
+	//Either the distance between the point and its projection on the segment if it exists
+	//Or the distance to the closest point of the segment if it doesn't
+	Point P = projection(pPoint);
+	if (P == DUMMY)
+		return std::min(pPoint->distance(&m_Points[0]), pPoint->distance(&m_Points[0]));
+	else
+		return pPoint->distance(&P);
 }

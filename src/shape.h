@@ -3,6 +3,7 @@
 
 #include "point.h"
 #include <vector>
+#include <algorithm>
 
 
 //Declarations of all classes that will be used.
@@ -10,8 +11,6 @@ class Shape;
 class Segment;
 class Circle;
 class Bord;
-
-
 
 class Shape {
 public:
@@ -33,8 +32,9 @@ public:
 	//Ideas for Shapes and Movements : we need at each run to update the position and speed of the object
 	virtual void update(Point) {};
 
-	//should we also have some sort of "Assert function on the Shapes to ensure after each run the coherence of our world ?
-	virtual bool assert() { return true;  }
+	Point getPosition() { return m_position; };
+	Point getSpeed() { return m_speed; }
+
 
 
 protected:
@@ -57,18 +57,19 @@ public:
 
 	//Getters
 	Point getCenter() { return m_center; }
-	int getRadius() { return m_radius; }
+	float getRadius() { return m_radius; }
 
-	int distance(Circle*);
+	float distance(Circle*);
 	bool collideWith(Circle*);
 	bool touch(Circle*);
 	Point getNormal(Circle*);
 	Point getNormal(Segment*);
+
 	//Update speed according to normal
-	void update(Point);
+	void updateSpeed(Point);
 
 protected:
-	int m_radius;
+	float m_radius;
 	Point m_center;
 };
 
@@ -78,27 +79,32 @@ class Segment : public Shape
 //Note : The class will regroup both Segment and Vectors... See if it has to be changed later.
 public:
 	Segment();
-	Segment(Point A, Point B, bool isvector = false);
+	Segment(Point A, Point B);
 
 	std::vector<Point> getPoints() { return m_Points;  }
 
-	int length();
+	double length();
 
 	//Assert that the Segment is correctly living (ie has two points)
-	bool assert();
-	
-	//return true if the point is above the Segment (AB) assuming that the segment is horizontal A left B right
-	bool isAbove(Point* pPoint);
-	
-	//returns True if the point is on the segment
-	bool isOnSegment(Point* pPoint);
+	bool hasTwoPoints();
 
+
+	//Returns the shortest distance from a given point to the segment
+	double distance(Point* pPoint);	
+	//Returns True if the point is on the segment
+	bool isOnSegment(Point* pPoint);
 	//Returns a pointer to the intersection with another segment (nullptr if the segments do not intersect)
 	Point* intersectWith(Segment* pSegment);
+
+	Point projection(Point* pPoint);
+
+	bool collideWith(Circle* pCircle);
 
 	//Get normal vector
 	Point getNormal(Shape*) { return getNormal(); };
 	Point getNormal();
+	//Get tangent Vector
+	Point getTangent();
 
 	//Update
 	void update(Point N) {};
@@ -106,8 +112,6 @@ public:
 protected:
 	//should contain 2 points
 	std::vector<Point> m_Points;
-	//False if the Segment is only a Segment, True if the direction has to be taken into account (then from first to second point)
-	bool m_isVector;
 };
 
 class Bord : public Segment

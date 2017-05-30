@@ -13,6 +13,9 @@ public:
 	Point();
 	Point(double , double);
 	~Point() {}
+	
+	Point normalize();
+	double normL2();
 
 	double distance();
 	double distance(Point*);
@@ -21,7 +24,10 @@ public:
 	Point operator*(double);
 	double operator*(Point);
 	Point operator/(double);
-	double normL2();
+	bool operator==(Point);
+
+#define DUMMY Point(-1,-1)
+
 };
 
 #endif
