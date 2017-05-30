@@ -4,6 +4,8 @@
 #include <cmath>
 #include<stdexcept>
 
+#define DUMMY Point(-1,-1)
+
 class Point {
 public:
 	double X;
@@ -15,6 +17,7 @@ public:
 	~Point() {}
 	
 	Point normalize();
+	double determinant(Point* pPoint);
 	double normL2();
 
 	double distance();
@@ -26,7 +29,7 @@ public:
 	Point operator/(double);
 	bool operator==(Point);
 
-#define DUMMY Point(-1,-1)
+
 
 };
 

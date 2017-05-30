@@ -57,3 +57,9 @@ Point Point::normalize()
 {
 	return *this / normL2();
 }
+
+double Point::determinant(Point* pPoint)
+{
+	// Return Point ^ pPoint*
+	return (X*pPoint->Y - Y*pPoint->X);
+}

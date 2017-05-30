@@ -89,10 +89,28 @@ bool Segment::collideWith(Circle* pCircle)
 
 
 
-Point* Segment::intersectWith(Segment* pSegment)
+Point Segment::intersectWith(Segment* pSegment)
 {
-	//TODO
-	return &Point();
+	//Suppose that the first Segment is AB, the second CD, we look for the intersection E such as 
+	//E = A + alpha (B-A) = C + beta (D-C)
+	//All lines ^(B-A) gives A^(B-A) = C^(B-A) + beta (D-C)^(B-A) and gives beta
+	Point
+		A = m_Points[0],
+		BminA = m_Points[1]-A,
+		C = pSegment->getPoints()[0],
+		DminC = pSegment->getPoints()[1]-C;
+	
+	double beta_num = ((A - C).determinant(&BminA));
+	double beta_den = (DminC.determinant(&BminA));
+
+	if (beta_den != 0)
+	{
+		double beta = beta_num / beta_den;
+		if (beta >= 0 && beta <= 1)
+			return (C + DminC*beta);
+	}
+
+	return DUMMY;
 }
 
 Point Segment::getNormal() {

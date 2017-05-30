@@ -91,7 +91,7 @@ public:
 	//Returns the shortest distance from a given point to the segment
 	double distance(Point* pPoint);	
 	//Returns a pointer to the intersection with another segment (nullptr if the segments do not intersect)
-	Point* intersectWith(Segment* pSegment);
+	Point intersectWith(Segment* pSegment);
 
 	Point projection(Point* pPoint);
 
