@@ -76,7 +76,6 @@ double Segment::length()
 }
 
 
-
 bool Segment::collideWith(Circle* pCircle)
 {
 	if (pCircle)

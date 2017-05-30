@@ -23,6 +23,7 @@ public:
 	//pos = 0, 1, 2 only : pos = 0 is the first button (add objects), 1 is the second (add punctual forces)
 	//2 is the third (add global forces).
 	//Everything else raises an exception.
+	Button() { Button(0, 0); }
 	Button(int type, int pos);
 	~Button();
 	//Methods to get the sprite

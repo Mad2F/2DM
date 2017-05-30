@@ -34,9 +34,7 @@ public:
 
 	Point getPosition() { return m_position; };
 	Point getSpeed() { return m_speed; }
-
-
-
+	
 protected:
 	Point m_speed;
 	Point m_position;
@@ -87,12 +85,11 @@ public:
 
 	//Assert that the Segment is correctly living (ie has two points)
 	bool hasTwoPoints();
-
-
+	
+	//returns True if the point is on the segment
+	bool isOnSegment(Point* pPoint);
 	//Returns the shortest distance from a given point to the segment
 	double distance(Point* pPoint);	
-	//Returns True if the point is on the segment
-	bool isOnSegment(Point* pPoint);
 	//Returns a pointer to the intersection with another segment (nullptr if the segments do not intersect)
 	Point* intersectWith(Segment* pSegment);
 

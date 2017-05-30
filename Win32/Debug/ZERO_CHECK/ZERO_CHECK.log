@@ -1,8 +1,1 @@
-﻿  Checking Build System
-  CMake is re-running because D:/VSProjects/2DM-master/2DM/bin/CMakeFiles/generate.stamp is out-of-date.
-    the file 'D:/VSProjects/2DM-master/2DM/CMakeLists.txt'
-    is newer than 'D:/VSProjects/2DM-master/2DM/bin/CMakeFiles/generate.stamp.depend'
-    result='-1'
-  -- Configuring done
-  -- Generating done
-  -- Build files have been written to: D:/VSProjects/2DM-master/2DM/bin
+﻿
