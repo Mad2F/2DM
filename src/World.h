@@ -16,10 +16,11 @@ public:
 	bool hasBords() { return (m_encastred.empty()); }
 	bool isFunctional() { return (hasEnvironment() && hasBords()); }
 
-	//Assertions to ensure that all shapes are contained within the borders of the world
-	//TODO
-	bool isInside(Shape*) {return true;}
-	bool allShapesAreInside();
+	//Check if a shape is within the border of the world
+	bool isInside(Shape*);
+
+	//Remove the shapes that are outside of the world
+	void deleteOutsideShapes();
 
 
 
@@ -30,6 +31,11 @@ protected:
 	std::vector<Shape*> m_shapes;
 	std::vector<Bord*> m_encastred;
 	Environment* m_Envir;
+
+	int m_xMax;
+	int m_yMax;
+
+
 
 };
 
