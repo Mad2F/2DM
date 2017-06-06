@@ -4,6 +4,7 @@
 #include <SFML\Graphics.hpp>
 #include <cassert>
 #include <iostream>
+#include "user_input.h"
 
 class force_entry {
 public:

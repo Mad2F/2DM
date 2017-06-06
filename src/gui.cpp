@@ -79,8 +79,12 @@ bool gui::checkButtons(sf::Vector2i mousePosition) {
 				}
 			}
 		}
-		std::cout << "Enter Radius" << std::endl;
-		std::cin >> radius;
+		user_input UI("Enter radius as int", &font);
+		radius = UI.getIntInput();
+		while (radius < 0) {
+			user_input UI("Enter radius as int", &font);
+			radius = UI.getIntInput();
+		}
 		addForm(posX, posY, radius);
 	}
 	if (B2.isClicked(posX, posY)) { B2.click(); }
@@ -246,9 +250,13 @@ void gui::updateForceEntry(int index) {
 			break;
 		}
 		//Take new value
-		std::cout << "Enter new " + ind << std::endl;
-		float X;
-		std::cin >> X;
+		std::string message = "Enter new " + ind;
+		user_input UI(message, &font);
+		float X = UI.getFloatInput();
+		while (X < 0) {
+			user_input UI(message, &font);
+			X = UI.getFloatInput();
+		}
 		//If even, it's an angle
 		if (index % 2 == 0) {
 			int Val = int(X) % 360;
