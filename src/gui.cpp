@@ -8,6 +8,12 @@ gui::gui() {
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(30);
 
+	//Set font
+	//Set the police
+	if (!font.loadFromFile(path_to_police)) {
+		throw std::logic_error("Unable to open police");
+	}
+
 	//Create an empty white rectangle
 	sim.setSize(sf::Vector2f(575, 575));
 	sim.setFillColor(sf::Color().White);
@@ -84,7 +90,7 @@ bool gui::checkButtons(sf::Vector2i mousePosition) {
 }
 
 //Block and unblock the buttons
-void gui::playpauseButtons(bool justClick) {
+void gui::playpauseButtons(bool justClick, int ref) {
 	//If the play button is clicked block the other buttons
 	if (justClick) {
 		if (justClick && playB.isClicked()) {
@@ -99,6 +105,10 @@ void gui::playpauseButtons(bool justClick) {
 			B3.unblock();
 		}
 	}
+	//If text buttons clicked and simulation paused
+	else if (ref != 0 && !playB.isClicked()) {
+		updateForceEntry(ref);
+	}
 }
 
 //Display everything
@@ -107,6 +117,22 @@ void gui::display() {
 	window.clear(sf::Color(145, 145, 145, 255));
 	//Draw simulation window
 	window.draw(sim);
+	//Draw gvalue
+	window.draw(G_Force.getRectangle());
+	window.draw(G_Force.getText());
+	window.draw(G_Force.getLegend());
+	//Draw g angle
+	window.draw(G_Dir.getRectangle());
+	window.draw(G_Dir.getText());
+	window.draw(G_Dir.getLegend());
+	//Draw wind force
+	window.draw(Wind_Force.getRectangle());
+	window.draw(Wind_Force.getText());
+	window.draw(Wind_Force.getLegend());
+	//Draw Wind angle
+	window.draw(Wind_Dir.getRectangle());
+	window.draw(Wind_Dir.getText());
+	window.draw(Wind_Dir.getLegend());
 	//Draw sprites and text
 	window.draw(playB.getSprite());
 	window.draw(B1.getSprite());
@@ -135,6 +161,8 @@ void gui::display() {
 
 //Control master loop
 void gui::masterLoop() {
+	//Reference for click in force entries
+	int ref = 0;
 	// program runs until the window is closed
 	while (window.isOpen())
 	{
@@ -149,24 +177,89 @@ void gui::masterLoop() {
 			if (event.type == sf::Event::Resized) {
 				resize();
 			}
+
 			//If the mouse is clicked, check if the click affects one of the buttons
 			if (mouse.isButtonPressed(sf::Mouse::Left)) {
 				sf::Vector2i mousePosition = getMouse();
 				justClicked = checkButtons(mousePosition);
-			}
+				ref = checkForceEntry(mousePosition);
+ 			}
 			//If the event type is a closure, close
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
 		//Unblock or block buttons
-		playpauseButtons(justClicked);
+		playpauseButtons(justClicked, ref);
+		ref = 0;
 		//Display
 		display();
 	}
 }
 
+//Update positions
 void gui::update(){}
 
+//Add a form to the vector
 void gui::addForm(int x, int y, int r) {
 	collection.push_back(Circle(Point(x, y), r));
+}
+
+//Check if there is a force entry change
+int gui::checkForceEntry(sf::Vector2i MousePos) {
+	if (G_Force.getRectangle().getGlobalBounds().contains(MousePos.x, MousePos.y)) {
+		return 1;
+	}
+	if (G_Dir.getRectangle().getGlobalBounds().contains(MousePos.x, MousePos.y)) {
+		return 2;
+	}
+	if (Wind_Force.getRectangle().getGlobalBounds().contains(MousePos.x, MousePos.y)) {
+		return 3;
+	}
+	if (Wind_Dir.getRectangle().getGlobalBounds().contains(MousePos.x, MousePos.y)) {
+		return 4;
+	}
+	return 0;
+}
+
+//Update the force entry
+void gui::updateForceEntry(int index) {
+	if (index != 0) {
+		//Get text to display and reference to the force_entry class button corresponding
+		std::string ind;
+		force_entry* ref;
+		switch (index) {
+		case 1:
+			ind = "g-force";
+			ref = &G_Force;
+			break;
+		case 2:
+			ind = "g-direction. The reference is vertical upright, in a trigonometric way.";
+			ref = &G_Dir;
+			break;
+		case 3:
+			ind = "wind force in N/m^2.";
+			ref = &Wind_Force;
+			break;
+		case 4:
+			ind = "wind direction. The reference is vertical upright, in a trigonometric way.";
+			ref = &Wind_Dir;
+			break;
+		}
+		//Take new value
+		std::cout << "Enter new " + ind << std::endl;
+		float X;
+		std::cin >> X;
+		//If even, it's an angle
+		if (index % 2 == 0) {
+			int Val = int(X) % 360;
+			ref->setText(std::to_string(Val) + " °");
+		}
+		//Else it's a float (set precision of 2 numbers)
+		else {
+			std::ostringstream out;
+			out << std::setprecision(2) << X;
+			std::string Val = out.str();
+			ref->setText(Val + "N/m^2");
+		}
+	}
 }

@@ -19,9 +19,9 @@ Button::Button(int type, int pos) {
 			m_blocked = false;
 			//Set position of sprite and of text
 			m_posX = 640;
-			m_posY = 400;
+			m_posY = 500;
 			m_posT_X = m_posX + 5;
-			m_posT_Y = 468;
+			m_posT_Y = 568;
 			//Set text
 			m_text_off = "Start simulation";
 			m_text_on = "Pause simulation";
@@ -45,7 +45,7 @@ Button::Button(int type, int pos) {
 			m_blocked = false;
 			//Set position of sprite
 			m_posX = 600;
-			m_posY = 100 + 100 * pos;
+			m_posY = 200 + 100 * pos;
 			//According to position, set text and position of text
 			//Catch unknown position
 			switch (pos) {
@@ -53,19 +53,19 @@ Button::Button(int type, int pos) {
 				m_text_off = "Add objects";
 				m_text_on = "Add objects";
 				m_posT_X = 650;
-				m_posT_Y = 120;
+				m_posT_Y = 220;
 				break;
 			case 1:
 				m_text_off = "Add forces on one object";
 				m_text_on = "Add forces on one object";
 				m_posT_X = 620;
-				m_posT_Y = 220;
+				m_posT_Y = 320;
 				break;
 			case 2:
 				m_text_off = "Add forces on all objects";
 				m_text_on = "Add forces on all objects";
 				m_posT_X = 620;
-				m_posT_Y = 320;
+				m_posT_Y = 420;
 				break;
 			default:
 				throw std::logic_error("Unknown position");

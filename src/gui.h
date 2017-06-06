@@ -1,8 +1,12 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include <sstream>
+#include <iomanip>
+
 #include "button.h"
 #include "shape.h"
+#include "force_entry.h"
 
 class gui {
 public:
@@ -16,7 +20,7 @@ public:
 	//Check if buttons are activated
 	bool checkButtons(sf::Vector2i);
 	//Block and unblock buttons
-	void playpauseButtons(bool);
+	void playpauseButtons(bool, int);
 	//Display buttons and text
 	void display();
 	//Control loop
@@ -32,10 +36,15 @@ public:
 	void update();
 	//Add circle
 	void addForm(int x, int y, int r);
+	//Check text forces and return corresponding text force index
+	int checkForceEntry(sf::Vector2i);
+	void updateForceEntry(int);
 
 private:
 	//Window
 	sf::RenderWindow window;
+	//default font
+	sf::Font font;
 	//Size
 	int W = 800;
 	int H = 600;
@@ -50,6 +59,12 @@ private:
 	//Rectangle shape
 	//Create an empty white rectangle
 	sf::RectangleShape sim;
+
+	//Rectangle shape for value of g and of wind
+	force_entry G_Force = force_entry(1, &font);
+	force_entry G_Dir = force_entry(2, &font);
+	force_entry Wind_Force = force_entry(3, &font);
+	force_entry Wind_Dir = force_entry(4, &font);
 
 	//get coefficients of height and width if the window is become bigger or smaller
 	//Because shapes are referenced only in local frame
