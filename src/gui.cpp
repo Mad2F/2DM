@@ -82,7 +82,7 @@ bool gui::checkButtons(sf::Vector2i mousePosition) {
 		user_input UI("Enter radius as int", &font);
 		radius = UI.getIntInput();
 		while (radius < 0) {
-			user_input UI("Enter radius as int", &font);
+			user_input UI("Enter radius as int AS AN INT PLEASE !", &font);
 			radius = UI.getIntInput();
 		}
 		addForm(posX, posY, radius);
@@ -254,6 +254,7 @@ void gui::updateForceEntry(int index) {
 		user_input UI(message, &font);
 		float X = UI.getFloatInput();
 		while (X < 0) {
+			message += " AS A FLOAT PLEASE !";
 			user_input UI(message, &font);
 			X = UI.getFloatInput();
 		}

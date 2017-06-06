@@ -24,6 +24,7 @@ user_input::user_input(std::string message, sf::Font* font) {
 	text_in.setColor(sf::Color().Black);
 	text_in.setCharacterSize(16);
 	text_in.setPosition(15, 60);
+	text_in.setString("|");
 
 	// program runs until the window is closed
 	while (window.isOpen())
@@ -39,7 +40,7 @@ user_input::user_input(std::string message, sf::Font* font) {
 			if (event.type == sf::Event::TextEntered) {
 				if (event.text.unicode < 128 && event.text.unicode != 10 && event.text.unicode != 13) {
 					input += static_cast<char>(event.text.unicode);
-					text_in.setString(input);
+					text_in.setString(input + "|");
 				}
 				if (event.text.unicode == 10 || event.text.unicode == 13) {
 					window.close();
