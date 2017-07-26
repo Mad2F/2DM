@@ -36,6 +36,10 @@ gui::gui() {
 	colorcollection.push_back(sf::Color::Black + sf::Color::White);
 	colorcollection.push_back(sf::Color::Yellow + sf::Color::Red);
 	colorcollection.push_back(sf::Color::Blue + sf::Color::Red);
+
+	//Add initial void forces
+	forces.push_back(Point(0, 9.81));
+	forces.push_back(Point(0, 0));
 }
 
 //Resize by updating the coefficient relative to the window
@@ -148,7 +152,7 @@ void gui::display() {
 	window.draw(B3.getText());
 	int k = 0;
 	for (std::vector<Circle>::iterator it = collection.begin(); it != collection.end(); ++it) {
-		Point center = it->getCenter();
+		Point center = it->getPosition() + it ->getCenter();
 		int radius = it->getRadius();
 		sf::Color c = colorcollection.at(k%10);
 		sf::CircleShape Circle(radius * sim.getSize().x * coeffX / W_world);
@@ -167,6 +171,8 @@ void gui::display() {
 void gui::masterLoop() {
 	//Reference for click in force entries
 	int ref = 0;
+	//Initialize clock
+	sf::Clock clock;
 	// program runs until the window is closed
 	while (window.isOpen())
 	{
@@ -195,13 +201,26 @@ void gui::masterLoop() {
 		//Unblock or block buttons
 		playpauseButtons(justClicked, ref);
 		ref = 0;
+		//Get elapsed time
+		time = clock.getElapsedTime();
+		clock.restart();
+		//Update positions of collection of circles
+		if (playB.isClicked()) {
+			update();
+		}
 		//Display
 		display();
 	}
 }
 
 //Update positions
-void gui::update(){}
+void gui::update(){
+	for (auto it = this->collection.begin(); it != this->collection.end(); ++it){
+		Point SumF = Point(forces.at(0).X + forces.at(1).X, forces.at(0).Y + forces.at(1).Y);
+		std::cout << forces.at(1).X << " " << forces.at(1).X << std::endl;
+		it->update(time.asSeconds(), SumF);
+	}
+}
 
 //Add a form to the vector
 void gui::addForm(int x, int y, int r) {
@@ -262,6 +281,18 @@ void gui::updateForceEntry(int index) {
 		if (index % 2 == 0) {
 			int Val = int(X) % 360;
 			ref->setText(std::to_string(Val) + " °");
+			//If g angle
+			if (index == 2) {
+				float NormG = forces.at(0).normL2();
+				forces.at(0).X = NormG * cos(Val);
+				forces.at(0).Y = NormG * sin(Val);
+			}
+			//Else wind
+			if (index == 4) {
+				float NormW = forces.at(1).normL2();				
+				forces.at(1).X = NormW * cos(Val);
+				forces.at(1).Y = NormW * sin(Val);
+			}
 		}
 		//Else it's a float (set precision of 2 numbers)
 		else {
@@ -269,6 +300,23 @@ void gui::updateForceEntry(int index) {
 			out << std::setprecision(2) << X;
 			std::string Val = out.str();
 			ref->setText(Val + "N/m^2");
+			//If g angle
+			if (index == 1) {
+				float cosG = forces.at(0).Y == 0 ? 0 : forces.at(0).X / forces.at(0).Y;
+				float sinG = forces.at(0).X == 0 ? 0 : forces.at(0).Y / forces.at(0).X;
+				forces.at(0).X = X * cosG;
+				forces.at(0).Y = X * sinG;
+			}
+			//Else wind
+			if (index == 3) {
+				float cosG = forces.at(1).Y == 0 ? 0 : forces.at(1).X / forces.at(1).Y;
+				float sinG = forces.at(1).X == 0 ? 0 : forces.at(1).Y / forces.at(1).X;
+				if (cosG == 0 && sinG == 0) {
+					cosG = 1;
+				}
+				forces.at(1).X = X * cosG;
+				forces.at(1).Y = X * sinG;
+			}
 		}
 	}
 }

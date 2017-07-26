@@ -66,6 +66,9 @@ public:
 	//Update speed according to normal
 	void updateSpeed(Point);
 
+	//Update center
+	void update(float, Point);
+
 protected:
 	float m_radius;
 	Point m_center;

@@ -52,6 +52,13 @@ void Circle::updateSpeed(Point N) {
 	m_speed = m_speed - N * 2 * (m_speed*N);
 }
 
+void Circle::update(float t, Point SumForces) {
+	m_speed = m_speed + SumForces * t;
+	if (m_speed.normL2() > 0.01){
+	m_speed = m_speed - m_speed.normalize() * m_speed.normL2() * 0.005;
+	}
+	m_position = m_position + m_speed * t;
+}
 
 
 //------------------------------------------------

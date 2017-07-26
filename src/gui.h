@@ -27,6 +27,8 @@ public:
 	void masterLoop();
 	//vector with necessary objects
 	std::vector<Circle> collection;
+	//vector with necessary forces
+	std::vector<Point> forces; 
 	//list with colors to paint objects
 	std::vector<sf::Color> colorcollection;
 	//Size reference of universe
@@ -39,6 +41,8 @@ public:
 	//Check text forces and return corresponding text force index
 	int checkForceEntry(sf::Vector2i);
 	void updateForceEntry(int);
+	//Time rendering
+	sf::Time time;
 
 private:
 	//Window
